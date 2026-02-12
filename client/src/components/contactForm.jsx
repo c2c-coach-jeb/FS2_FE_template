@@ -16,7 +16,7 @@ const ContactForm = () => {
     event.preventDefault();
     axios
       // Reminder: set REACT_APP_API_BASE_URL in your .env once your Express server is up.
-      .post(`${process.env.REACT_APP_API_BASE_URL}/submit-form`, formData)
+      .post(`${process.env.REACT_APP_API_BASE_URL}/contact`, formData)
       .then((response) => {
         console.log(response.data);
         // TODO: replace this console.log with user feedback once the POST route is working.

@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -21,8 +21,18 @@ const db = mysql.createPool({
 });
 
 // TODO: Implement /submit-form to handle form data and insert into your database
-app.post('/submit-form', (req, res) => {
-  res.status(501).json({ message: 'Not implemented yet' });
+app.post('/contact', async (req, res) => {
+  const formData = req.body;
+  const sql = "INSERT INTO contacts (first_name, last_name, email, message) VALUES (?, ?, ?, ?)";
+  const values = [formData.firstname, formData.lastname, formData.email, formData.subject];
+  try {
+    const result = await db.execute(sql, values);
+    res.status(201).send('Form data inserted!');
+  } catch (e) {
+    console.error(e);
+    res.status(500).send("Error adding contact.");
+  }
+
 });
 
 // Optional: quick health check
