@@ -29,7 +29,7 @@ apiRouter.post('/contact', async (req, res) => {
   const sql = "INSERT INTO contacts (first_name, last_name, email, message) VALUES (?, ?, ?, ?)";
   const values = [formData.firstname, formData.lastname, formData.email, formData.subject];
   try {
-    const result = await db.execute(sql, values);
+    await db.execute(sql, values);
     res.status(201).send('Form data inserted!');
   } catch (e) {
     console.error(e);
@@ -41,18 +41,18 @@ apiRouter.post('/contact', async (req, res) => {
 // Optional: quick health check
 apiRouter.get('/health', (req, res) => res.json({ ok: true }));
 
-apiRouter.get('/api/ecommerce/products', (req, res) => {
-  const sql = 'SELECT * FROM products';
+apiRouter.get('/products', async (req, res) => {
+  const sql = 'SELECT id, name, description, image_url, price FROM products';
 
-  db.query(sql, (err, rows) => {
-    if (err) {
+  try {
+    const [response] = await db.query(sql)
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).json({rows: response});
+  } catch (e) {
       console.error('Error fetching products:', err);
       return res.status(500).json({ message: 'Database error' });
-    }
+  }
 
-    res.setHeader('Content-Type', 'application/json');
-    res.json(rows);
-  });
 });
 
 app.listen(PORT, () => {

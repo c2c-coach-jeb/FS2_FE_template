@@ -17,9 +17,9 @@ const Shopping = () => {
     const fetchProducts = async () => {
       try {
         const { data } = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/api/ecommerce/products`
+          `${process.env.REACT_APP_API_BASE_URL}/api/products`
         );
-        setProducts(data);
+        setProducts(data.rows);
         setError(null);
       } catch (err) {
         console.error(err);
@@ -28,7 +28,6 @@ const Shopping = () => {
         setIsLoading(false);
       }
     };
-
     fetchProducts();
   }, []);
 
@@ -65,7 +64,7 @@ const Shopping = () => {
         {isLoading && <p>Loading products...</p>}
         {error && <p>{error}</p>}
         {!isLoading && !error && products.length === 0 && (
-          <p>No products available at the moment.</p>
+            <h2>No products available at the moment.</h2>
         )}
         {!isLoading && !error &&
           products.map((product) => (
