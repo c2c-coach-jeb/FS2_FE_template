@@ -7,9 +7,12 @@ const mysql = require('mysql2/promise');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors());
-app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+const apiRouter = express.Router();
+apiRouter.use(cors("*"));
+apiRouter.use(express.json());
+apiRouter.use(bodyParser.urlencoded({ extended: true }));
+
+app.use("/api", apiRouter);
 
 // ✅ Using mysql2 + dotenv
 // TODO: Configure this pool with your schema credentials from Lesson 9.
@@ -21,7 +24,7 @@ const db = mysql.createPool({
 });
 
 // TODO: Implement /submit-form to handle form data and insert into your database
-app.post('/contact', async (req, res) => {
+apiRouter.post('/contact', async (req, res) => {
   const formData = req.body;
   const sql = "INSERT INTO contacts (first_name, last_name, email, message) VALUES (?, ?, ?, ?)";
   const values = [formData.firstname, formData.lastname, formData.email, formData.subject];
@@ -36,9 +39,9 @@ app.post('/contact', async (req, res) => {
 });
 
 // Optional: quick health check
-app.get('/health', (req, res) => res.json({ ok: true }));
+apiRouter.get('/health', (req, res) => res.json({ ok: true }));
 
-app.get('/api/ecommerce/products', (req, res) => {
+apiRouter.get('/api/ecommerce/products', (req, res) => {
   const sql = 'SELECT * FROM products';
 
   db.query(sql, (err, rows) => {

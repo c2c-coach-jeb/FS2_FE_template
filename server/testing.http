@@ -7,7 +7,7 @@ GET https://examples.http-client.intellij.net/get
 POST http://localhost:3001/contact
 
 ### POST contact with JSON body
-POST http://localhost:3001/contact
+POST http://localhost:3001/api/contact
 Content-Type: application/json
 
 {
