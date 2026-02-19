@@ -52,6 +52,41 @@ apiRouter.get('/products', (req, res) => {
     })
 });
 
+apiRouter.post("/cart", (req, res) => {
+    const sql = "INSERT INTO cart(name, price, description, image_url) values (?, ?, ?, ?)"
+    const {name, price, description, image_url} = req.body;
+    db.execute(sql, [name, price, description, image_url], (err, result) => {
+        if (err) {
+            console.log("ERROR", err);
+            res.status(500).json({error: "OH NO!!!"})
+        }
+        res.status(201).json({response: "Added to cart"});
+    });
+});
+
+function getCart(res) {
+    const sql = "select id, name, description, price, image_url from cart";
+    db.execute(sql, (err, result) => {
+        if (err) {
+            console.error("OH NO", err);
+            res.status(500).json({error: "Something horrible"});
+        } else {
+            console.log(result)
+            res.status(200).json({rows: result});
+        }
+    })
+}
+
+apiRouter.get("/cart", (req, res) => {
+    getCart(res);
+})
+
+apiRouter.delete("/cart/:id", (req, res) => {
+    const sql = "delete from cart where id = (?)";
+    db.execute(sql, [req.params.id], (err, result) => {
+        getCart(res);
+    })
+})
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });

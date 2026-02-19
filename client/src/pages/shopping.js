@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import NavBar from "../components/nav";
 import Product from "../components/product";
 
-const PAGE_PRODUCTS = "products";
-const PAGE_CART = "cart";
-
 const Shopping = () => {
-  const [cartList, setCartList] = useState([]);
-  const [page, setPage] = useState(PAGE_PRODUCTS);
-
   const [products, setProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -32,12 +29,10 @@ const Shopping = () => {
     fetchProducts();
   }, []);
 
-  const addToCart = (product) => {
-    setCartList([...cartList, product]);
-  };
-
-  const navigateTo = (nextPage) => {
-    setPage(nextPage);
+  const addToCart = async (product) => {
+    const response = await axios.post(`${process.env.REACT_APP_API_BASE_URL}/api/cart`, product);
+    console.log("Add to cart response:", response);
+    navigate("/cart");
   };
 
   const currencyFormatter = new Intl.NumberFormat("en-US", {
@@ -56,11 +51,6 @@ const Shopping = () => {
 
   const renderProducts = () => (
     <>
-      <header id="shopping-head">
-        <button onClick={() => navigateTo(PAGE_CART)} id="goToCart">
-          Go to Cart ({cartList.length})
-        </button>
-      </header>
       <div id="shopping">
         {isLoading && <p>Loading products...</p>}
         {error && <p>{error}</p>}
@@ -78,37 +68,9 @@ const Shopping = () => {
     </>
   );
 
-  const renderCart = () => (
-    <>
-      <div id="cart-container">
-        <button onClick={() => navigateTo(PAGE_PRODUCTS)} id="products-btn">
-          Back to Products
-        </button>
-
-        <h1 id="cart-title"> Cart </h1>
-
-        {cartList.map((product) => (
-          <div className="card card-container" key={product.id}>
-            <div id="product">
-              {product.image_url && (
-                <img src={product.image_url} alt={product.name || "Product"} />
-              )}
-              <h2> {product.name} </h2>
-              <h3> {product.description} </h3>
-              <h3> {formatPrice(product.price)} </h3>
-            </div>
-          </div>
-        ))}
-        <button id="checkout-btn">Checkout</button>
-      </div>
-    </>
-  );
-
   return (
     <div className="main">
       {renderProducts()}
-      {page === PAGE_CART && renderCart()}
-      <NavBar length={cartList.length} />
     </div>
   );
 };

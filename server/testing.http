@@ -16,3 +16,18 @@ Content-Type: application/json
   "email": "john.doe@example.com",
   "subject": "Hello — this is a test message from the HTTP client file."
 }
+
+### POST item to cart
+POST http://localhost:3001/api/cart
+Content-Type: application/json
+
+{
+    "name": "Left Handed Spiral Wrench",
+    "price": 1234
+}
+
+### Get cart
+GET http://localhost:3001/api/cart
+
+### DELETE item from cart
+DELETE http://localhost:3001/api/cart/2
