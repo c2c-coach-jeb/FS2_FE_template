@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from "react";
-import productImg from '../images/productImg.png';
 import axios from "axios";
 
 const Featured = () => {
