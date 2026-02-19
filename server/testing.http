@@ -2,9 +2,9 @@
 GET https://examples.http-client.intellij.net/get
     ?generated-in=IntelliJ IDEA
 
-###
+### GET Products
+GET http://localhost:3001/api/products
 
-POST http://localhost:3001/contact
 
 ### POST contact with JSON body
 POST http://localhost:3001/api/contact

@@ -1,0 +1,13 @@
+.product {
+    height: 260px;
+    overflow: hidden;
+}
+
+img {
+    height: 30%;
+    /*width: 30%;*/
+}
+
+.card {
+    border: none;
+}

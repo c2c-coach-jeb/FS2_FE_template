@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import NavBar from "../components/nav";
+import Product from "../components/product";
 
 const PAGE_PRODUCTS = "products";
 const PAGE_CART = "cart";
@@ -69,15 +70,8 @@ const Shopping = () => {
         {!isLoading && !error &&
           products.map((product) => (
             <div className="card" key={product.id}>
-              <div id="product">
-                {product.image_url && (
-                  <img src={product.image_url} alt={product.name || "Product"} />
-                )}
-                <h2> {product.name} </h2>
-                <h3> {product.description} </h3>
-                <h3> {formatPrice(product.price)} </h3>
+                <Product product = {product} />
                 <button onClick={() => addToCart(product)}> Add to Cart </button>
-              </div>
             </div>
           ))}
       </div>

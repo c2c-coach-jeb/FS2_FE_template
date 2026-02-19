@@ -1,12 +1,14 @@
 import React from "react";
+import './product.css';
+import currency from "currency.js";
 
-const Product = (props) => {
+const Product = ({product}) => {
+    console.log("PRODUCT PROPS", product)
   return (
-    <div id="product">
-      <img src={props.image} alt="" />
-      <h2> {props.name} </h2>
-      <h3> {props.description} </h3>
-      <h3> {props.price} </h3>
+    <div className="product">
+      <img src={product.image_url} alt="" />
+      <h2> {product.name} </h2>
+       {currency(product.price).format()}
     </div>
   );
 };
